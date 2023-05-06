@@ -5,18 +5,17 @@
  */
 
 import { useItems } from '@/stores/items'
-import { useCallback } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { useCallback, useState } from 'react'
 import NavItem from './NavItem'
+import ViewItem from './ViewItem'
 
 export default function Home() {
-  const navigate = useNavigate()
   const { ids, insert } = useItems()
+  const [currId, setId] = useState<string>()
 
   const onInsert = useCallback(() => {
-    const id = insert()
-    navigate(`/item/${id}`)
-  }, [insert, navigate])
+    setId(insert())
+  }, [insert])
 
   return (
     <>
@@ -32,7 +31,7 @@ export default function Home() {
                 +
               </li>
               {ids.map((id) => (
-                <NavItem key={id} id={id} />
+                <NavItem key={id} id={id} onSelect={setId} active={id === currId} />
               ))}
             </ul>
           </aside>
@@ -40,7 +39,12 @@ export default function Home() {
           <i className='border-l' />
 
           <main className='flex-1'>
-            <Outlet />
+            <p>{currId}</p>
+            {ids
+              .filter((id) => id === currId)
+              .map((id) => (
+                <ViewItem key={id} id={id} />
+              ))}
           </main>
         </section>
       </section>

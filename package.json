@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "clsx": "^1.2.1",
     "jotai": "^2.0.4",
+    "jsoneditor": "^9.10.0",
     "nanoid": "^4.0.2",
     "ramda": "^0.29.0",
     "react": "^18.2.0",
@@ -19,6 +21,7 @@
     "react-use": "^17.4.0"
   },
   "devDependencies": {
+    "@types/jsoneditor": "^9.9.0",
     "@types/node": "^20.0.0",
     "@types/ramda": "^0.29.1",
     "@types/react": "^18.0.28",

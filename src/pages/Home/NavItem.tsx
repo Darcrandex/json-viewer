@@ -5,29 +5,20 @@
  */
 
 import { useItems, useItemState } from '@/stores/items'
+import clsx from 'clsx'
 import * as R from 'ramda'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 
-export type NavItemProps = { id: string }
+export type NavItemProps = { id: string; active?: boolean; onSelect?: (id?: string) => void }
 
 export default function NavItem(props: NavItemProps) {
-  const navigate = useNavigate()
-  const location = useLocation()
   const { remove } = useItems()
   const { itemState, setItem } = useItemState(props.id)
 
-  const onClick = useCallback(() => {
-    const to = `/item/${itemState.id}`
-    if (to !== location.pathname) {
-      navigate(to)
-    }
-  }, [itemState.id, location.pathname, navigate])
-
   const onRemove = useCallback(() => {
-    remove(itemState.id)
-    navigate('/', { replace: true })
-  }, [itemState.id, navigate, remove])
+    remove(props.id)
+    props.onSelect?.(undefined)
+  }, [props, remove])
 
   const [editing, setEditing] = useState(false)
   const [name, setName] = useState(itemState.name)
@@ -54,7 +45,10 @@ export default function NavItem(props: NavItemProps) {
 
   return (
     <>
-      <li className='flex items-center justify-between cursor-pointer' onClick={onClick}>
+      <li
+        className={clsx('flex items-center justify-between cursor-pointer', props.active ? 'bg-emerald-100' : '')}
+        onClick={() => props.onSelect?.(props.id)}
+      >
         {editing ? (
           <>
             <input

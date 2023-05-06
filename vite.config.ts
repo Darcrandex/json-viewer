@@ -9,7 +9,6 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), legacy()],
     resolve: { alias: { '@': path.resolve(__dirname, './src'), src: path.resolve(__dirname, './src') } },
-
     server: { host: true, port: parseInt(env.VITE_APP_PORT) || 3000 },
   }
 })
