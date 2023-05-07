@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 修复 antd-icons 位置偏移的问题 */
+@layer base {
+  svg {
+    vertical-align: baseline;
+  }
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
