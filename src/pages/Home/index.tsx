@@ -11,7 +11,6 @@ import { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import NavItem from './NavItem'
 import ViewItem from './ViewItem'
-import './styles.less'
 
 const MAX_COUNT = 20
 
