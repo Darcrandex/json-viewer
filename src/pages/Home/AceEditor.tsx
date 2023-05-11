@@ -6,9 +6,11 @@
 
 import ace from 'ace-builds'
 import 'ace-builds/src-min-noconflict/mode-json.js'
+import 'ace-builds/src-min-noconflict/worker-json.js'
+
+// 主题文件
 import 'ace-builds/src-min-noconflict/theme-nord_dark.js'
 import 'ace-builds/src-min-noconflict/theme-one_dark.js'
-import 'ace-builds/src-min-noconflict/worker-json.js'
 
 import { CSSProperties, ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { useFullscreen, useToggle } from 'react-use'
@@ -41,6 +43,7 @@ function AceEditor(props: AceEditorProps, ref: ForwardedRef<AceEditorHandle>) {
         selectionStyle: 'text',
         theme: 'ace/theme/nord_dark',
         value: props.defaultValue,
+        placeholder: 'type or paste JSON here',
       })
 
       editor.focus()

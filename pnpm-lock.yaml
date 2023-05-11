@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@ant-design/cssinjs':
+    specifier: ^1.9.1
+    version: 1.9.1(react-dom@18.2.0)(react@18.2.0)
   '@ant-design/icons':
     specifier: ^5.0.1
     version: 5.0.1(react-dom@18.2.0)(react@18.2.0)

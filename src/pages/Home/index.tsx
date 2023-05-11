@@ -72,6 +72,15 @@ export default function Home() {
               .map((id) => (
                 <ViewItem key={id} id={id} />
               ))}
+
+            {ids.length === 0 && (
+              <div className='flex-1 flex items-center justify-center'>
+                <span className='text-white text-lg mr-2'>Nothing here</span>
+                <Button type='primary' onClick={onInsert}>
+                  Create A New One
+                </Button>
+              </div>
+            )}
           </main>
         </section>
       </section>

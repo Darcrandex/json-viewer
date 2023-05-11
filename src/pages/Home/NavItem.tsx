@@ -10,6 +10,7 @@ import { Button } from 'antd'
 import clsx from 'clsx'
 import * as R from 'ramda'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 
 export type NavItemProps = { id: string; active?: boolean; onSelect?: (id?: string) => void }
 
@@ -33,6 +34,12 @@ export default function NavItem(props: NavItemProps) {
     if (name?.trim()) {
       setEditing(false)
       setItem((curr) => R.mergeLeft({ name }, curr))
+    } else {
+      toast.error('name is required', {
+        autoClose: 1000,
+        closeButton: false,
+        progressStyle: { visibility: 'hidden' },
+      })
     }
   }, [name, setItem])
 
