@@ -5,14 +5,15 @@
  */
 
 import { useItems } from '@/stores/items'
-import { GithubOutlined, PlusOutlined } from '@ant-design/icons'
+import { FileAddOutlined, GithubOutlined } from '@ant-design/icons'
+import { Button } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 
-import clsx from 'clsx'
 import NavItem from './NavItem'
 import ViewItem from './ViewItem'
 
 const MAX_COUNT = 20
+const PROJECT_URL = 'https://github.com/Darcrandex/json-viewer'
 
 export default function Home() {
   const { ids, insert } = useItems()
@@ -32,28 +33,32 @@ export default function Home() {
 
   return (
     <>
-      <section className='flex flex-col h-screen'>
-        <header className='flex items-center border-b p-4'>
-          <h1 className='font-extrabold text-emerald-500 mr-auto'>JSON Viewer</h1>
-
-          <a href='https://github.com/Darcrandex/json-viewer' target='_blank'>
-            <GithubOutlined className='text-2xl text-gray-800' />
-          </a>
+      <section className='flex flex-col h-screen bg-gray-800'>
+        <header className='flex items-center p-2'>
+          <span className='w-40'></span>
+          <h1 className='flex-1 text-center text-blue-400 font-bold'>JSON Viewer</h1>
+          <span className='w-40 text-right'>
+            <Button
+              type='link'
+              href={PROJECT_URL}
+              target='_blank'
+              icon={<GithubOutlined className='text-white text-lg' />}
+            />
+          </span>
         </header>
 
         <section className='flex-1 flex overflow-auto'>
           <aside className='w-60 flex flex-col h-full'>
-            <nav
-              className={clsx(
-                'mx-2 mt-2 mb-4 py-1 border border-dashed rounded-md text-center transition-all',
-                ids.length > MAX_COUNT
-                  ? 'border-gray-700 bg-gray-100 cursor-not-allowed'
-                  : 'cursor-pointer hover:border-solid border-emerald-500'
-              )}
-              onClick={onInsert}
-            >
-              <PlusOutlined className={clsx(ids.length > MAX_COUNT ? 'text-gray-700' : 'text-emerald-500')} />
-            </nav>
+            <section className='flex items-center justify-between px-2 bg-gray-700 text-white'>
+              <span className='font-bold py-1'>FILES</span>
+              <Button
+                size='small'
+                type='text'
+                icon={<FileAddOutlined className='text-white/50 hover:text-white' />}
+                onClick={onInsert}
+              />
+            </section>
+
             <section className='flex-1 overflow-auto'>
               {ids.map((id) => (
                 <NavItem key={id} id={id} onSelect={setId} active={id === currId} />
@@ -61,9 +66,7 @@ export default function Home() {
             </section>
           </aside>
 
-          <i className='border-l' />
-
-          <main className='flex-1'>
+          <main className='flex-1 flex flex-col bg-gray-700 border-l border-gray-600'>
             {ids
               .filter((id) => id === currId)
               .map((id) => (

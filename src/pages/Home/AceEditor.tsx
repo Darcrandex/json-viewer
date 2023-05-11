@@ -7,8 +7,11 @@
 import ace from 'ace-builds'
 import 'ace-builds/src-min-noconflict/mode-json.js'
 import 'ace-builds/src-min-noconflict/theme-nord_dark.js'
+import 'ace-builds/src-min-noconflict/theme-one_dark.js'
 import 'ace-builds/src-min-noconflict/worker-json.js'
+
 import { CSSProperties, ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { useFullscreen, useToggle } from 'react-use'
 
 export type AceEditorProps = {
   defaultValue?: string
@@ -21,11 +24,15 @@ export type AceEditorHandle = {
   setValue(value: string): void
   getValue(): string
   setFontSize(size: number): void
+  toggleFullscreen: (show: boolean) => void
+  setTheme(theme: string): void
 }
 
 function AceEditor(props: AceEditorProps, ref: ForwardedRef<AceEditorHandle>) {
   const elRef = useRef<HTMLDivElement>(null)
   const aceRef = useRef<ace.Ace.Editor | null>(null)
+  const [show, toggle] = useToggle(false)
+  useFullscreen(elRef, show, { onClose: () => toggle(false) })
 
   useEffect(() => {
     if (elRef.current && !aceRef.current) {
@@ -34,7 +41,6 @@ function AceEditor(props: AceEditorProps, ref: ForwardedRef<AceEditorHandle>) {
         selectionStyle: 'text',
         theme: 'ace/theme/nord_dark',
         value: props.defaultValue,
-        fontSize: 16,
       })
 
       editor.focus()
@@ -57,12 +63,19 @@ function AceEditor(props: AceEditorProps, ref: ForwardedRef<AceEditorHandle>) {
   useImperativeHandle(ref, () => ({
     setValue(str) {
       aceRef.current?.setValue(str)
+      aceRef.current?.clearSelection()
     },
     getValue() {
       return aceRef.current?.getValue() || ''
     },
     setFontSize(size) {
       aceRef.current?.setFontSize(size)
+    },
+    toggleFullscreen(isOpen) {
+      toggle(isOpen)
+    },
+    setTheme(theme) {
+      aceRef.current?.setTheme(theme)
     },
   }))
 

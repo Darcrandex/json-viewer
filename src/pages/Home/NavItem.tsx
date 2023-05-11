@@ -4,8 +4,9 @@
  * @author darcrand
  */
 
-import { useItems, useItemState } from '@/stores/items'
+import { useItemState, useItems } from '@/stores/items'
 import { DeleteOutlined, HighlightOutlined } from '@ant-design/icons'
+import { Button } from 'antd'
 import clsx from 'clsx'
 import * as R from 'ramda'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -52,57 +53,49 @@ export default function NavItem(props: NavItemProps) {
     <>
       <nav
         className={clsx(
-          'group flex items-center justify-between mb-2 mx-2 p-2 border rounded-md cursor-pointer transition-all  select-none',
-          props.active ? 'bg-emerald-50 border-emerald-500' : 'border-emerald-200 hover:border-emerald-500'
+          'group flex items-center justify-between cursor-pointer text-white transition-all select-none',
+          props.active ? 'bg-gray-600' : 'hover:bg-white/5'
         )}
         onClick={() => props.onSelect?.(props.id)}
       >
         {editing ? (
           <>
-            <div>
-              <input
-                ref={ref}
-                className='w-full outline-none px-1 rounded-md text-gray-800'
-                type='text'
-                maxLength={20}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                onBlur={onCancel}
-                onKeyUp={onKeyUp}
-              />
-            </div>
+            <input
+              ref={ref}
+              className='w-full outline-none flex-1 pl-4 pr-2 py-1 bg-blue-400/20'
+              type='text'
+              maxLength={20}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onBlur={onCancel}
+              onKeyUp={onKeyUp}
+            />
           </>
         ) : (
           <>
-            <span
-              title={itemState.name}
-              className={clsx(
-                'flex-1 mr-2 truncate transition-all',
-                props.active ? 'text-emerald-500' : 'text-gray-800'
-              )}
-            >
+            <span title={itemState.name} className='flex-1 pl-4 pr-2 py-1 truncate'>
               {itemState.name}
             </span>
 
-            <span className='space-x-2 transition-all opacity-0 group-hover:opacity-100'>
-              <button
-                title='edit'
-                className='px-1 transition-all opacity-75 hover:opacity-100'
-                onClick={() => setEditing(true)}
-              >
-                <HighlightOutlined className={clsx(props.active ? 'text-emerald-500' : 'text-gray-600')} />
-              </button>
-
-              <button
-                title='remove'
-                className='px-1 transition-all opacity-75 hover:opacity-100'
+            <span className='flex space-x-1 mr-2 transition-all opacity-0 group-hover:opacity-100'>
+              <Button
+                size='small'
+                type='text'
+                icon={<HighlightOutlined className='text-white/50 hover:text-white' />}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setEditing(true)
+                }}
+              />
+              <Button
+                size='small'
+                type='text'
+                icon={<DeleteOutlined className='text-white/50 hover:text-white' />}
                 onClick={(e) => {
                   e.stopPropagation()
                   onRemove()
                 }}
-              >
-                <DeleteOutlined className={clsx(props.active ? 'text-emerald-500' : 'text-gray-600')} />
-              </button>
+              />
             </span>
           </>
         )}
