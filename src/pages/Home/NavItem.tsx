@@ -88,6 +88,7 @@ export default function NavItem(props: NavItemProps) {
               <Button
                 size='small'
                 type='text'
+                title='edit'
                 icon={<HighlightOutlined className='text-white/50 hover:text-white' />}
                 onClick={(e) => {
                   e.stopPropagation()
@@ -97,6 +98,7 @@ export default function NavItem(props: NavItemProps) {
               <Button
                 size='small'
                 type='text'
+                title='remove'
                 icon={<DeleteOutlined className='text-white/50 hover:text-white' />}
                 onClick={(e) => {
                   e.stopPropagation()

@@ -66,7 +66,6 @@ function AceEditor(props: AceEditorProps, ref: ForwardedRef<AceEditorHandle>) {
   useImperativeHandle(ref, () => ({
     setValue(str) {
       aceRef.current?.setValue(str)
-      aceRef.current?.clearSelection()
     },
     getValue() {
       return aceRef.current?.getValue() || ''

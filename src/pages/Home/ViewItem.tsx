@@ -101,31 +101,31 @@ export default function ViewItem(props: ViewItemProps) {
   return (
     <>
       <header className='flex items-center space-x-4 p-2'>
-        <Button type='text' onClick={onFormat}>
+        <Button type='text' title='format' onClick={onFormat}>
           <AlignLeftOutlined className='text-white/75 hover:text-white transition-all' />
         </Button>
 
-        <Button type='text' onClick={onClear}>
+        <Button type='text' title='remove' onClick={onClear}>
           <DeleteOutlined className='text-white/75 hover:text-white transition-all' />
         </Button>
 
-        <Button type='text' onClick={onCopy}>
+        <Button type='text' title='copy' onClick={onCopy}>
           <CopyOutlined className='text-white/75 hover:text-white transition-all' />
         </Button>
 
         <Dropdown trigger={['click']} menu={{ items: fontSizeMenus }}>
-          <Button type='text'>
+          <Button type='text' title='font size'>
             <FontSizeOutlined className='text-white/75 hover:text-white transition-all' />
           </Button>
         </Dropdown>
 
         <Dropdown trigger={['click']} menu={{ items: themeMenus }}>
-          <Button type='text'>
+          <Button type='text' title='theme'>
             <SkinOutlined className='text-white/75 hover:text-white transition-all' />
           </Button>
         </Dropdown>
 
-        <Button type='text' onClick={onFullscreen}>
+        <Button type='text' title='full screen' onClick={onFullscreen}>
           <FullscreenOutlined className='text-white/75 hover:text-white transition-all' />
         </Button>
       </header>

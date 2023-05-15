@@ -36,7 +36,13 @@ export default function Home() {
       <section className='flex flex-col h-screen bg-gray-800'>
         <header className='flex items-center p-2'>
           <span className='w-40'></span>
-          <h1 className='flex-1 text-center text-blue-400 font-bold'>JSON Viewer</h1>
+          <h1 className='flex-1 flex items-center justify-center text-blue-400 font-bold'>
+            <img src='/json-logo.ico' alt='' width={20} />
+            <span className='ml-2' style={{ fontFamily: 'Pacifico-Regular' }}>
+              JSON Viewer
+            </span>
+          </h1>
+
           <span className='w-40 text-right'>
             <Button
               type='link'
@@ -54,6 +60,7 @@ export default function Home() {
               <Button
                 size='small'
                 type='text'
+                title='add'
                 icon={<FileAddOutlined className='text-white/50 hover:text-white' />}
                 onClick={onInsert}
               />
