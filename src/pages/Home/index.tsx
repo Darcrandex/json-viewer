@@ -6,7 +6,7 @@
 
 import { useItems } from '@/stores/items'
 import { FileAddOutlined, GithubOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
+import { Button, Popover } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 
 import NavItem from './NavItem'
@@ -37,19 +37,28 @@ export default function Home() {
         <header className='flex items-center p-2'>
           <span className='w-40'></span>
           <h1 className='flex-1 flex items-center justify-center text-blue-400 font-bold'>
-            <img src='/json-logo.ico' alt='' width={20} />
-            <span className='ml-2' style={{ fontFamily: 'Pacifico-Regular' }}>
+            <img src='/json-logo.png' alt='' width={20} />
+            <span className='ml-2' style={{ fontFamily: 'KaushanScript-Regular' }}>
               JSON Viewer
             </span>
           </h1>
 
           <span className='w-40 text-right'>
-            <Button
-              type='link'
-              href={PROJECT_URL}
-              target='_blank'
-              icon={<GithubOutlined className='text-white text-lg' />}
-            />
+            <Popover
+              placement='bottomRight'
+              content={
+                <a href={PROJECT_URL} target='_blank' className='!text-gray-700'>
+                  make with 💖 by darcrand
+                </a>
+              }
+            >
+              <Button
+                type='link'
+                href={PROJECT_URL}
+                target='_blank'
+                icon={<GithubOutlined className='text-white text-lg' />}
+              />
+            </Popover>
           </span>
         </header>
 
