@@ -41,6 +41,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  react-router-dom:
+    specifier: ^6.22.2
+    version: 6.22.2(react-dom@18.2.0)(react@18.2.0)
   react-toastify:
     specifier: ^10.0.4
     version: 10.0.4(react-dom@18.2.0)(react@18.2.0)
@@ -52,9 +55,6 @@ devDependencies:
   '@types/node':
     specifier: ^20.11.23
     version: 20.11.23
-  '@types/prettier':
-    specifier: ^3.0.0
-    version: 3.0.0
   '@types/ramda':
     specifier: ^0.29.10
     version: 0.29.10
@@ -638,6 +638,11 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
+  /@remix-run/router@1.15.2:
+    resolution: {integrity: sha512-+Rnav+CaoTE5QJc4Jcwh5toUpnVLKYbpU6Ys0zqbakqbaLQHeglLVHPfxOiQqdNmUy5C2lXz5dwC6tQNX2JW2Q==}
+    engines: {node: '>=14.0.0'}
+    dev: false
+
   /@rollup/rollup-android-arm-eabi@4.12.0:
     resolution: {integrity: sha512-+ac02NL/2TCKRrJu2wffk1kZ+RyqxVUlbjSagNgPm94frxtr+XDL12E5Ll1enWskLrtrZ2r8L3wED1orIibV/w==}
     cpu: [arm]
@@ -890,13 +895,6 @@ packages:
     resolution: {integrity: sha512-ZUarKKfQuRILSNYt32FuPL20HS7XwNT7/uRwSV8tiHWfyyVwDLYZNF6DZKc2bove++pgfsXn9sUwII/OsQ82cQ==}
     dependencies:
       undici-types: 5.26.5
-    dev: true
-
-  /@types/prettier@3.0.0:
-    resolution: {integrity: sha512-mFMBfMOz8QxhYVbuINtswBp9VL2b4Y0QqYHwqLz3YbgtfAcat2Dl6Y1o4e22S/OVE6Ebl9m7wWiMT2lSbAs1wA==}
-    deprecated: This is a stub types definition. prettier provides its own type definitions, so you do not need this installed.
-    dependencies:
-      prettier: 3.2.5
     dev: true
 
   /@types/prop-types@15.7.11:
@@ -2360,6 +2358,7 @@ packages:
     resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
     engines: {node: '>=14'}
     hasBin: true
+    dev: false
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
@@ -2912,6 +2911,29 @@ packages:
 
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
+    dev: false
+
+  /react-router-dom@6.22.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-WgqxD2qySEIBPZ3w0sHH+PUAiamDeszls9tzqMPBDA1YYVucTBXLU7+gtRfcSnhe92A3glPnvSxK2dhNoAVOIQ==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.15.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-router: 6.22.2(react@18.2.0)
+    dev: false
+
+  /react-router@6.22.2(react@18.2.0):
+    resolution: {integrity: sha512-YD3Dzprzpcq+tBMHBS822tCjnWD3iIZbTeSXMY9LPSG541EfoBGyZ3bS25KEnaZjLcmQpw2AVLkFyfgXY8uvcw==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.15.2
+      react: 18.2.0
     dev: false
 
   /react-toastify@10.0.4(react-dom@18.2.0)(react@18.2.0):

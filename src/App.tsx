@@ -4,14 +4,20 @@
  * @author darcrand
  */
 
+import { Suspense } from 'react'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
-import Home from './pages/Home'
+import { routes } from './routes'
+
+const router = createBrowserRouter(routes)
 
 export default function App() {
   return (
     <>
-      <Home />
-      <ToastContainer />
+      <Suspense fallback={<p>loading...</p>}>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </Suspense>
     </>
   )
 }
