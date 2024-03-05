@@ -15,7 +15,7 @@ const FILE_LIST_KEY = 'fileList'
 export const db = {
   fileList: {
     getAll: () => {
-      return myStore.getItem(FILE_LIST_KEY)
+      return myStore.getItem<FileItem[]>(FILE_LIST_KEY)
     },
 
     create: async (fileItem: Omit<FileItem, 'id'>) => {
@@ -46,11 +46,9 @@ export const db = {
   },
 
   items: {
-    create: async (data: Omit<JSONData, 'id'>) => {
-      const id = nanoid()
-      const item = { ...data, id }
-      await myStore.setItem(id, item)
-      return id
+    create: async (data: JSONData) => {
+      await myStore.setItem(data.id, data)
+      return data.id
     },
 
     getById: async (id: string) => {

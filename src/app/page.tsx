@@ -4,10 +4,8 @@
  * @author darcrand
  */
 
+import { redirect } from 'next/navigation'
+
 export default function Page() {
-  return (
-    <>
-      <h1>Hello</h1>
-    </>
-  )
+  return redirect('/files')
 }
