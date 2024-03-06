@@ -5,6 +5,7 @@
  */
 
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 
 const AsideBar = dynamic(() => import('@/components/AsideBar'), {
@@ -14,10 +15,18 @@ const AsideBar = dynamic(() => import('@/components/AsideBar'), {
 export default function FilesLayout(props: PropsWithChildren) {
   return (
     <>
-      <section className='flex h-screen'>
-        <AsideBar />
+      <section className='h-screen flex flex-col'>
+        <header className='p-2'>
+          <nav>
+            <Link href='/files'>Files</Link>
+          </nav>
+        </header>
 
-        <main className='flex-1'>{props.children}</main>
+        <section className='flex-1 flex'>
+          <AsideBar />
+
+          <main className='flex-1'>{props.children}</main>
+        </section>
       </section>
     </>
   )

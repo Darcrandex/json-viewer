@@ -7,9 +7,9 @@
 'use client'
 import { db } from '@/lib/db'
 import { FileItem } from '@/lib/db/scheme/file-item'
-import { cls } from '@/utils/cls'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
+import ListItem from './ListItem'
 
 const MAX_FILES = 100
 
@@ -34,6 +34,15 @@ export default function AsideBar() {
     onSuccess: (createdId) => {
       queryClient.invalidateQueries({ queryKey: ['files'] })
       router.push(`/files/${createdId}`)
+    },
+  })
+
+  const { mutate: onUpdate } = useMutation({
+    mutationFn: async (data: FileItem) => {
+      await db.fileList.update(data)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['files'] })
     },
   })
 
@@ -64,25 +73,8 @@ export default function AsideBar() {
 
         <ul>
           {list?.map((item) => (
-            <li
-              key={item.id}
-              className={cls(
-                'flex items-center p-2 cursor-pointer text-white transition-all',
-                id === item.id ? 'bg-slate-800' : 'hover:bg-slate-500'
-              )}
-              onClick={() => router.push(`/files/${item.id}`)}
-            >
-              <span className='flex-1'>{item.name}</span>
-
-              <button
-                type='button'
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onRemove(item.id)
-                }}
-              >
-                remove
-              </button>
+            <li key={item.id} onClick={() => router.push(`/files/${item.id}`)}>
+              <ListItem value={item} active={id === item.id} onChange={onUpdate} onRemove={onRemove} />
             </li>
           ))}
         </ul>
