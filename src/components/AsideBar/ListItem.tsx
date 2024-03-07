@@ -4,15 +4,15 @@
  * @author darcrand
  */
 
-import { FileItem } from '@/lib/db/scheme/file-item'
+import { FileSchema } from '@/lib/db'
 import { cls } from '@/utils/cls'
 import { useClickAway } from 'ahooks'
 import { useRef, useState } from 'react'
 
 export type ListItemProps = {
-  value: FileItem
+  value: FileSchema
   onRemove: (id: string) => void
-  onChange: (data: FileItem) => void
+  onChange: (data: FileSchema) => void
 
   active?: boolean
   className?: string
@@ -36,7 +36,6 @@ export default function ListItem(props: ListItemProps) {
         className={cls(
           'relative flex justify-between items-center p-2 cursor-pointer',
           props.active ? 'bg-blue-300' : 'bg-red-300',
-
           props.className
         )}
       >

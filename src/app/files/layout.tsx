@@ -25,7 +25,9 @@ export default function FilesLayout(props: PropsWithChildren) {
         <section className='flex-1 flex'>
           <AsideBar />
 
-          <main className='flex-1'>{props.children}</main>
+          <main className='flex-1' style={{ backgroundColor: 'rgb(30,30,30)' }}>
+            {props.children}
+          </main>
         </section>
       </section>
     </>

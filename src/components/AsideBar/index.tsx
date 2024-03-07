@@ -5,8 +5,7 @@
  */
 
 'use client'
-import { db } from '@/lib/db'
-import { FileItem } from '@/lib/db/scheme/file-item'
+import { FileSchema, db } from '@/lib/db'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 import ListItem from './ListItem'
@@ -21,25 +20,27 @@ export default function AsideBar() {
   const { data: list } = useQuery({
     queryKey: ['files'],
     queryFn: () => {
-      return db.fileList.getAll()
+      return db.files.getAll()
     },
   })
 
   const { mutate: onCreate } = useMutation({
-    mutationFn: async (data: Omit<FileItem, 'id'>) => {
-      const id = await db.fileList.create(data)
-      await db.items.create({ id, text: '' })
+    mutationFn: async (data: Omit<FileSchema, 'id'>) => {
+      const id = await db.files.create(data)
+      await db.contents.create({ fileId: id, content: '' })
+      await db.navs.create({ fileId: id })
       return id
     },
     onSuccess: (createdId) => {
       queryClient.invalidateQueries({ queryKey: ['files'] })
+      queryClient.invalidateQueries({ queryKey: ['navs'] })
       router.push(`/files/${createdId}`)
     },
   })
 
   const { mutate: onUpdate } = useMutation({
-    mutationFn: async (data: FileItem) => {
-      await db.fileList.update(data)
+    mutationFn: async (data: FileSchema) => {
+      await db.files.update(data)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['files'] })
@@ -48,14 +49,24 @@ export default function AsideBar() {
 
   const { mutate: onRemove } = useMutation({
     mutationFn: async (id: string) => {
-      await db.fileList.remove(id)
-      await db.items.remove(id)
+      await db.files.remove(id)
+      await db.contents.remove(id)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['files'] })
       router.replace('/files')
     },
   })
+
+  const onNavigate = async (id: string) => {
+    const matchedNav = (await db.navs.getAll()).find((v) => v.fileId === id && v.compareId === undefined)
+
+    if (!matchedNav) {
+      await db.navs.create({ fileId: id })
+      queryClient.invalidateQueries({ queryKey: ['navs'] })
+    }
+    router.push(`/files/${id}`)
+  }
 
   return (
     <>
@@ -73,7 +84,7 @@ export default function AsideBar() {
 
         <ul>
           {list?.map((item) => (
-            <li key={item.id} onClick={() => router.push(`/files/${item.id}`)}>
+            <li key={item.id} onClick={() => onNavigate(item.id)}>
               <ListItem value={item} active={id === item.id} onChange={onUpdate} onRemove={onRemove} />
             </li>
           ))}

@@ -5,6 +5,7 @@
  */
 
 'use client'
+import TopNavs from '@/components/TopNavs'
 import { useOnReady } from '@/hooks/useOnReady'
 import { db } from '@/lib/db'
 import { useEditorOptions } from '@/store/editor-options'
@@ -21,25 +22,25 @@ export default function ContentPage() {
   const [value, setValue] = useState<string>()
 
   const { data } = useQuery({
-    queryKey: ['file', 'data', id],
-    queryFn: () => db.items.getById(id),
+    queryKey: ['content', id],
+    queryFn: () => db.contents.getById(id),
   })
 
   useOnReady(
     () => {
-      if (data?.text) {
-        setValue(data.text)
+      if (data?.content) {
+        setValue(data.content)
       }
     },
-    () => data?.text !== undefined
+    () => data?.content !== undefined
   )
 
   const { mutate: updateItem } = useMutation({
-    mutationFn: async (text?: string) => {
-      await db.items.update({ ...data, id, text })
+    mutationFn: async (content?: string) => {
+      await db.contents.update({ ...data, id, content })
     },
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ['file', 'data', id] })
+      queryClient.invalidateQueries({ queryKey: ['content', id] })
       console.log('update success')
     },
   })
@@ -47,31 +48,35 @@ export default function ContentPage() {
   const updateToDB = useCallback(
     (content?: string) => {
       const t = setTimeout(() => {
-        if (content !== data?.text) {
+        if (content !== data?.content) {
           updateItem(content)
         }
-      }, 1000)
+      }, 500)
 
       return () => clearTimeout(t)
     },
-    [data?.text, updateItem]
+    [data?.content, updateItem]
   )
 
   return (
     <>
-      <section className='h-full relative' style={{ backgroundColor: 'rgb(30,30,30)' }}>
-        <div data-name='fixed-wrapper' className='absolute inset-0'>
-          <MonacoEditor
-            language='json'
-            theme={editorOptions.theme}
-            options={{ fontSize: editorOptions.fontSize }}
-            loading={null}
-            value={value}
-            onChange={(val) => {
-              setValue(val)
-              updateToDB(val)
-            }}
-          />
+      <section className='flex flex-col h-full'>
+        <TopNavs />
+
+        <div className='flex-1 relative'>
+          <article data-name='fixed-wrapper' className='absolute inset-0'>
+            <MonacoEditor
+              language='json'
+              theme={editorOptions.theme}
+              options={{ fontSize: editorOptions.fontSize }}
+              loading={null}
+              value={value}
+              onChange={(val) => {
+                setValue(val)
+                updateToDB(val)
+              }}
+            />
+          </article>
         </div>
 
         {/* <DiffEditor
