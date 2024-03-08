@@ -13,8 +13,10 @@ export type ListItemProps = {
   value: FileSchema
   onRemove: (id: string) => void
   onChange: (data: FileSchema) => void
+  onCompare: (id: string) => void
 
   active?: boolean
+  canCompare?: boolean
   className?: string
 }
 
@@ -25,9 +27,15 @@ export default function ListItem(props: ListItemProps) {
 
   const [value, setValue] = useState(props.value.name)
   const [editing, setEditing] = useState(false)
+
   const onConfirm = () => {
     setEditing(false)
     props.onChange({ ...props.value, name: value || 'unnamed' })
+  }
+
+  const onCancel = () => {
+    setValue(props.value.name)
+    setEditing(false)
   }
 
   return (
@@ -51,6 +59,10 @@ export default function ListItem(props: ListItemProps) {
             onKeyUp={(e) => {
               if (e.key === 'Enter') {
                 onConfirm()
+              }
+
+              if (e.key === 'Escape') {
+                onCancel()
               }
             }}
           />
@@ -93,6 +105,20 @@ export default function ListItem(props: ListItemProps) {
             >
               rename
             </button>
+
+            {props.canCompare && (
+              <button
+                type='button'
+                className='cursor-pointer hover:bg-blue-300'
+                onClick={(e) => {
+                  e.stopPropagation()
+                  props.onCompare(props.value.id)
+                  setOpen(false)
+                }}
+              >
+                compare to current
+              </button>
+            )}
           </menu>
         )}
       </div>

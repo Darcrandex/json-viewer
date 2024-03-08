@@ -9,22 +9,40 @@ import TopNavs from '@/components/TopNavs'
 import { useOnReady } from '@/hooks/useOnReady'
 import { db } from '@/lib/db'
 import { useEditorOptions } from '@/store/editor-options'
-import MonacoEditor from '@monaco-editor/react'
+import MonacoEditor, { DiffEditor } from '@monaco-editor/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 
 export default function ContentPage() {
   const { editorOptions } = useEditorOptions()
+  const router = useRouter()
 
   const queryClient = useQueryClient()
-  const id = useParams().id as string
+  const fileId = useParams().id as string
+  const compareId = useSearchParams().get('compareId')
   const [value, setValue] = useState<string>()
 
-  const { data } = useQuery({
-    queryKey: ['content', id],
-    queryFn: () => db.contents.getById(id),
+  const { data, error } = useQuery({
+    queryKey: ['content', fileId],
+    enabled: !!fileId,
+    queryFn: async () => {
+      const res = await db.contents.getById(fileId)
+
+      if (res) {
+        return res
+      } else {
+        throw new Error('not found')
+      }
+    },
   })
+
+  useEffect(() => {
+    if (error) {
+      router.replace('/files')
+      queryClient.invalidateQueries({ queryKey: [] })
+    }
+  }, [error, router, queryClient])
 
   useOnReady(
     () => {
@@ -37,10 +55,12 @@ export default function ContentPage() {
 
   const { mutate: updateItem } = useMutation({
     mutationFn: async (content?: string) => {
-      await db.contents.update({ ...data, id, content })
+      if (data?.id) {
+        await db.contents.update({ ...data, content })
+      }
     },
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ['content', id] })
+      queryClient.invalidateQueries({ queryKey: ['content', fileId] })
       console.log('update success')
     },
   })
@@ -58,6 +78,14 @@ export default function ContentPage() {
     [data?.content, updateItem]
   )
 
+  // compare
+
+  const { data: compareFile } = useQuery({
+    queryKey: ['content', compareId],
+    enabled: !!compareId,
+    queryFn: () => db.contents.getById(compareId || ''),
+  })
+
   return (
     <>
       <section className='flex flex-col h-full'>
@@ -65,27 +93,30 @@ export default function ContentPage() {
 
         <div className='flex-1 relative'>
           <article data-name='fixed-wrapper' className='absolute inset-0'>
-            <MonacoEditor
-              language='json'
-              theme={editorOptions.theme}
-              options={{ fontSize: editorOptions.fontSize }}
-              loading={null}
-              value={value}
-              onChange={(val) => {
-                setValue(val)
-                updateToDB(val)
-              }}
-            />
+            {!!compareFile ? (
+              <DiffEditor
+                language='json'
+                loading={null}
+                theme={editorOptions.theme}
+                options={{ fontSize: editorOptions.fontSize, readOnly: true }}
+                original={compareFile.content}
+                modified={value}
+              />
+            ) : (
+              <MonacoEditor
+                language='json'
+                loading={null}
+                theme={editorOptions.theme}
+                options={{ fontSize: editorOptions.fontSize }}
+                value={value}
+                onChange={(val) => {
+                  setValue(val)
+                  updateToDB(val)
+                }}
+              />
+            )}
           </article>
         </div>
-
-        {/* <DiffEditor
-          language='json'
-          theme={editorOptions.theme}
-          options={{ fontSize: editorOptions.fontSize }}
-          modified={value}
-          original={data?.text}
-        /> */}
       </section>
     </>
   )

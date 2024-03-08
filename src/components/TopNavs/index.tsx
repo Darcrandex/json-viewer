@@ -11,10 +11,10 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import * as R from 'ramda'
 
 export default function TopNavs() {
-  const { data } = useQuery({
+  const { data: navList } = useQuery({
     queryKey: ['navs'],
     queryFn: () => db.navs.getAll(),
-    select: (arr) => R.sortWith([R.ascend(R.prop('updatedAt'))], arr),
+    select: (arr) => R.sortWith([R.ascend(R.prop('createdAt'))], arr),
   })
 
   const router = useRouter()
@@ -30,7 +30,7 @@ export default function TopNavs() {
       const isCloseCurrent = navItem.fileId === fileId && navItem.compareId === compareId
 
       if (isCloseCurrent) {
-        const firstMathed = data?.find((v) => v.fileId !== navItem.fileId || v.compareId !== navItem.compareId)
+        const firstMathed = navList?.find((v) => v.fileId !== navItem.fileId || v.compareId !== navItem.compareId)
         if (firstMathed) {
           nextPath = `/files/${firstMathed.fileId}`
         } else {
@@ -48,13 +48,14 @@ export default function TopNavs() {
   })
 
   const onNavigate = (data: NavSchema) => {
-    router.replace(`/files/${data.fileId}`)
+    const href = data.compareId ? `/files/${data.fileId}?compareId=${data.compareId}` : `/files/${data.fileId}`
+    router.replace(href)
   }
 
   return (
     <>
       <nav className='flex flex-nowrap'>
-        {data?.map((v) => (
+        {navList?.map((v) => (
           <NavItem key={v.id} data={v} onClick={() => onNavigate(v)} onRemove={() => onRemove(v)} />
         ))}
       </nav>
@@ -64,7 +65,9 @@ export default function TopNavs() {
 
 function NavItem(props: { data: NavSchema; onClick?: () => void; onRemove?: () => void }) {
   const fileId = useParams().id as string
+  const compareId = useSearchParams().get('compareId') || undefined
   const navFileId = props.data.fileId
+  const navCompareId = props.data.compareId
 
   const { data: fileData } = useQuery({
     queryKey: ['file', 'item', navFileId],
@@ -72,14 +75,29 @@ function NavItem(props: { data: NavSchema; onClick?: () => void; onRemove?: () =
     queryFn: () => db.files.getById(navFileId || ''),
   })
 
-  const isActive = navFileId === fileId
+  const { data: compareFileData } = useQuery({
+    queryKey: ['file', 'item', navCompareId],
+    enabled: !!navCompareId,
+    queryFn: () => db.files.getById(navCompareId || ''),
+  })
+
+  const isActive = fileId === navFileId && compareId === navCompareId
 
   return (
     <div
       className={cls('p-4 space-x-2 text-white', isActive ? 'bg-gray-500 text-blue-300' : '')}
       onClick={() => props.onClick?.()}
     >
-      <span>{fileData?.name}</span>
+      {!!navCompareId ? (
+        <span>
+          <span>{fileData?.name}</span>
+          <span>--</span>
+          <span>{compareFileData?.name}</span>
+        </span>
+      ) : (
+        <span>{fileData?.name}</span>
+      )}
+
       <button
         type='button'
         onClick={(e) => {

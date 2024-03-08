@@ -1,10 +1,10 @@
 'use client'
 
 import localforage from 'localforage'
-import { nanoid } from 'nanoid'
+import { customAlphabet } from 'nanoid'
 
 // key 保持顺序性
-const createId = () => nanoid(6)
+const createId = () => customAlphabet('1234567890abcdef', 10)()
 
 export type DataSchema = {
   id: string
@@ -48,6 +48,10 @@ export function createModel<T extends DataSchema>(options: { dbName: string; tab
 
     async count() {
       return await table.length()
+    },
+
+    async clear() {
+      await table.clear()
     },
   }
 }
