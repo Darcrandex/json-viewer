@@ -8,6 +8,7 @@
 import { FileSchema, db } from '@/lib/db'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
+import * as R from 'ramda'
 import ListItem from './ListItem'
 
 const MAX_FILES = 100
@@ -19,13 +20,12 @@ export default function AsideBar() {
 
   const { data: list } = useQuery({
     queryKey: ['files'],
-    queryFn: () => {
-      return db.files.getAll()
-    },
+    queryFn: () => db.files.getAll(),
+    select: (arr) => R.sortWith([R.ascend(R.prop('updatedAt'))], arr),
   })
 
   const { mutate: onCreate } = useMutation({
-    mutationFn: async (data: Omit<FileSchema, 'id'>) => {
+    mutationFn: async (data: Omit<FileSchema, 'id' | 'createdAt' | 'updatedAt'>) => {
       const id = await db.files.create(data)
       await db.contents.create({ fileId: id, content: '' })
       await db.navs.create({ fileId: id })

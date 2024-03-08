@@ -3,16 +3,25 @@
 import localforage from 'localforage'
 import { nanoid } from 'nanoid'
 
-export function createModel<T extends { id: string }>(options: { dbName: string; tableName: string }) {
+// key 保持顺序性
+const createId = () => nanoid(6)
+
+export type DataSchema = {
+  id: string
+  createdAt: number
+  updatedAt: number
+}
+
+export function createModel<T extends DataSchema>(options: { dbName: string; tableName: string }) {
   const table = localforage.createInstance({
     name: options.dbName,
     storeName: options.tableName,
   })
 
   return {
-    async create(data: Omit<T, 'id'>) {
-      const id = nanoid()
-      await table.setItem(id, { ...data, id })
+    async create(data: Omit<T, 'id' | 'createdAt' | 'updatedAt'>) {
+      const id = createId()
+      await table.setItem(id, { ...data, id, createdAt: Date.now(), updatedAt: Date.now() })
       return id
     },
 
@@ -20,8 +29,8 @@ export function createModel<T extends { id: string }>(options: { dbName: string;
       return await table.getItem<T>(id)
     },
 
-    async update(data: T) {
-      await table.setItem(data.id, data)
+    async update(data: Omit<T, 'createdAt' | 'updatedAt'>) {
+      await table.setItem(data.id, { ...data, updatedAt: Date.now() })
     },
 
     async remove(id: string) {

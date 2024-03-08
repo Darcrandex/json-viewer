@@ -1,20 +1,17 @@
 'use client'
 
-import { createModel } from './utils'
+import { createModel, type DataSchema } from './utils'
 
-export type FileSchema = {
-  id: string
+export type FileSchema = DataSchema & {
   name: string
 }
 
-export type NavSchema = {
-  id: string
+export type NavSchema = DataSchema & {
   fileId: string
-  compareId?: string
+  compareId?: string // 比较文件的 id
 }
 
-export type ContentSchema = {
-  id: string
+export type ContentSchema = DataSchema & {
   fileId: string
   content?: string
 }
