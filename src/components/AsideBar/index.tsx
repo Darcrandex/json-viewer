@@ -6,6 +6,7 @@
 
 'use client'
 import { FileSchema, db } from '@/lib/db'
+import { cls } from '@/utils/cls'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import * as R from 'ramda'
@@ -13,7 +14,7 @@ import ListItem from './ListItem'
 
 const MAX_FILES = 100
 
-export default function AsideBar() {
+export default function AsideBar(props: { className?: string }) {
   const router = useRouter()
   const fileId = useParams().id as string
   const compareId = useSearchParams().get('compareId')
@@ -95,8 +96,8 @@ export default function AsideBar() {
 
   return (
     <>
-      <aside className='w-64' style={{ backgroundColor: 'rgb(50,50,50)' }}>
-        <header>
+      <aside className={cls('w-64', props.className)}>
+        <header className='space-x-2 text-white'>
           <button
             type='button'
             disabled={typeof list?.length === 'number' && list?.length >= MAX_FILES}

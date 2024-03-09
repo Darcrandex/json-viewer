@@ -9,12 +9,26 @@ import TopNavs from '@/components/TopNavs'
 import { useOnReady } from '@/hooks/useOnReady'
 import { db } from '@/lib/db'
 import { useEditorOptions } from '@/store/editor-options'
-import MonacoEditor, { DiffEditor } from '@monaco-editor/react'
+import MonacoEditor, { DiffEditor, useMonaco } from '@monaco-editor/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
+import themeData from '@/assets/monaco-theme/Tomorrow-Night-Eighties.json'
+
 export default function ContentPage() {
+  const monaco = useMonaco()
+  const [themeLoaded, setThemeLoaded] = useState(false)
+
+  useEffect(() => {
+    if (monaco) {
+      try {
+        monaco.editor.defineTheme('tomorrow-night-eighties', themeData as any)
+        setThemeLoaded(true)
+      } catch (error) {}
+    }
+  }, [monaco])
+
   const { editorOptions } = useEditorOptions()
   const router = useRouter()
 
@@ -96,8 +110,8 @@ export default function ContentPage() {
             {!!compareFile ? (
               <DiffEditor
                 language='json'
+                theme={themeLoaded ? 'tomorrow-night-eighties' : 'vs-dark'}
                 loading={null}
-                theme={editorOptions.theme}
                 options={{ fontSize: editorOptions.fontSize, readOnly: true }}
                 original={compareFile.content}
                 modified={value}
@@ -105,8 +119,8 @@ export default function ContentPage() {
             ) : (
               <MonacoEditor
                 language='json'
+                theme={themeLoaded ? 'tomorrow-night-eighties' : 'vs-dark'}
                 loading={null}
-                theme={editorOptions.theme}
                 options={{ fontSize: editorOptions.fontSize }}
                 value={value}
                 onChange={(val) => {

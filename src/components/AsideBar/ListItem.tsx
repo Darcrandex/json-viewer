@@ -43,7 +43,8 @@ export default function ListItem(props: ListItemProps) {
       <div
         className={cls(
           'relative flex justify-between items-center p-2 cursor-pointer',
-          props.active ? 'bg-blue-300' : 'bg-red-300',
+          'text-[#C6D0F5]',
+          props.active ? 'bg-[#414559]' : 'hover:bg-[#414559]/50',
           props.className
         )}
       >
@@ -67,7 +68,7 @@ export default function ListItem(props: ListItemProps) {
             }}
           />
         ) : (
-          <span className='mr-auto truncate'>{props.value.name}</span>
+          <span className='mr-auto truncate text-white'>{props.value.name}</span>
         )}
 
         <button
@@ -82,7 +83,7 @@ export default function ListItem(props: ListItemProps) {
         </button>
 
         {open && (
-          <menu ref={refMenu} className='absolute z-10 top-full left-full bg-red-300'>
+          <menu ref={refMenu} className='absolute z-10 top-full left-full flex flex-col p-2 space-y-2 bg-gray-800'>
             <button
               type='button'
               className='cursor-pointer hover:bg-blue-300'
