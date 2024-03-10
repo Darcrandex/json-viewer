@@ -5,9 +5,11 @@
  */
 
 import { FileSchema } from '@/lib/db'
+import { PopoverContent, PopoverRoot, PopoverTrigger } from '@/ui/Popover'
 import { cls } from '@/utils/cls'
-import { useClickAway } from 'ahooks'
-import { useRef, useState } from 'react'
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useState } from 'react'
 
 export type ListItemProps = {
   value: FileSchema
@@ -21,10 +23,6 @@ export type ListItemProps = {
 }
 
 export default function ListItem(props: ListItemProps) {
-  const [open, setOpen] = useState(false)
-  const refMenu = useRef<HTMLElement>(null)
-  useClickAway(() => setOpen(false), refMenu)
-
   const [value, setValue] = useState(props.value.name)
   const [editing, setEditing] = useState(false)
 
@@ -42,9 +40,9 @@ export default function ListItem(props: ListItemProps) {
     <>
       <div
         className={cls(
-          'relative flex justify-between items-center p-2 cursor-pointer',
-          'text-[#C6D0F5]',
-          props.active ? 'bg-[#414559]' : 'hover:bg-[#414559]/50',
+          'group relative flex justify-between items-center p-2 cursor-pointer transition-all',
+          'text-white',
+          props.active ? 'bg-white/20' : 'hover:bg-white/10',
           props.className
         )}
       >
@@ -52,9 +50,9 @@ export default function ListItem(props: ListItemProps) {
           <input
             type='text'
             value={value}
-            className='w-full'
+            className='w-full bg-transparent outline-none'
             autoFocus
-            maxLength={50}
+            maxLength={20}
             onChange={(e) => setValue(e.target.value)}
             onBlur={onConfirm}
             onKeyUp={(e) => {
@@ -71,57 +69,41 @@ export default function ListItem(props: ListItemProps) {
           <span className='mr-auto truncate text-white'>{props.value.name}</span>
         )}
 
-        <button
-          type='button'
-          className='shrink-0 ml-2 w-8'
-          onClick={(e) => {
-            e.stopPropagation()
-            setOpen(!open)
-          }}
-        >
-          {open ? '-' : '+'}
-        </button>
+        <PopoverRoot>
+          <PopoverTrigger
+            className={({ isOpen }) =>
+              cls('shrink-0 ml-2 w-8 transition-all', isOpen ? '' : 'opacity-0 group-hover:opacity-100')
+            }
+          >
+            <FontAwesomeIcon icon={faEllipsis} size='sm' />
+          </PopoverTrigger>
 
-        {open && (
-          <menu ref={refMenu} className='absolute z-10 top-full left-full flex flex-col p-2 space-y-2 bg-gray-800'>
-            <button
-              type='button'
-              className='cursor-pointer hover:bg-blue-300'
-              onClick={(e) => {
-                e.stopPropagation()
-                props.onRemove(props.value.id)
-              }}
-            >
-              remove
-            </button>
-
-            <button
-              type='button'
-              className='cursor-pointer hover:bg-blue-300'
-              onClick={(e) => {
-                e.stopPropagation()
-                setEditing(true)
-                setOpen(false)
-              }}
-            >
-              rename
-            </button>
-
-            {props.canCompare && (
+          <PopoverContent>
+            <menu className='flex flex-col w-48 p-2 space-y-2 bg-gray-800'>
               <button
                 type='button'
                 className='cursor-pointer hover:bg-blue-300'
-                onClick={(e) => {
-                  e.stopPropagation()
-                  props.onCompare(props.value.id)
-                  setOpen(false)
-                }}
+                onClick={() => props.onRemove(props.value.id)}
               >
-                compare to current
+                remove
               </button>
-            )}
-          </menu>
-        )}
+
+              <button type='button' className='cursor-pointer hover:bg-blue-300' onClick={() => setEditing(true)}>
+                rename
+              </button>
+
+              {props.canCompare && (
+                <button
+                  type='button'
+                  className='cursor-pointer hover:bg-blue-300'
+                  onClick={() => props.onCompare(props.value.id)}
+                >
+                  compare to current
+                </button>
+              )}
+            </menu>
+          </PopoverContent>
+        </PopoverRoot>
       </div>
     </>
   )

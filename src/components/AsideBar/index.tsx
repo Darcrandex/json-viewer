@@ -7,9 +7,13 @@
 'use client'
 import { FileSchema, db } from '@/lib/db'
 import { cls } from '@/utils/cls'
+import { faFileCirclePlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import * as R from 'ramda'
+
+import ClearButton from './ClearButton'
 import ListItem from './ListItem'
 
 const MAX_FILES = 100
@@ -35,13 +39,10 @@ export default function AsideBar(props: { className?: string }) {
       // 为了查询优化把它单独存储起来
       // 但是它的 id 应该与 file 的 id 一致
       await db.contents.update({ id, fileId: id, content: '' })
-
-      await db.navs.create({ fileId: id })
       return id
     },
     onSuccess: (createdId) => {
       queryClient.invalidateQueries({ queryKey: [] })
-      router.push(`/files/${createdId}`)
     },
   })
 
@@ -96,7 +97,7 @@ export default function AsideBar(props: { className?: string }) {
 
   return (
     <>
-      <aside className={cls('w-64', props.className)}>
+      <aside className={cls('flex flex-col w-64 overflow-auto', props.className)}>
         <header className='space-x-2 text-white'>
           <button
             type='button'
@@ -104,15 +105,13 @@ export default function AsideBar(props: { className?: string }) {
             className='p-2 my-2'
             onClick={() => onCreate({ name: 'new file' })}
           >
-            add
+            <FontAwesomeIcon icon={faFileCirclePlus} size='sm' />
           </button>
 
-          <button type='button' className='p-2 my-2' onClick={onClear}>
-            clear
-          </button>
+          <ClearButton onClear={onClear} />
         </header>
 
-        <ul>
+        <ul className='flex-1 overflow-auto'>
           {list?.map((item) => (
             <li key={item.id} onClick={() => onNavigate(item.id)}>
               <ListItem
