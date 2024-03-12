@@ -64,7 +64,6 @@ export default function AsideBar(props: { className?: string }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [] })
-      router.replace('/files')
     },
   })
 
@@ -95,16 +94,17 @@ export default function AsideBar(props: { className?: string }) {
     await db.navs.clear()
     router.replace('/files')
     queryClient.invalidateQueries({ queryKey: [] })
+    window?.localStorage.clear()
   }
 
   return (
     <>
       <aside className={cls('flex flex-col w-64 overflow-auto', props.className)}>
-        <header className='space-x-2 text-white'>
+        <header className='space-x-2 text-white text-right px-2 border-b border-gray-500'>
           <button
             type='button'
             disabled={typeof list?.length === 'number' && list?.length >= MAX_FILES}
-            className='p-2 my-2'
+            className='p-2 my-2 transition-all hover:opacity-75'
             onClick={() => onCreate({ name: 'new file' })}
           >
             <FontAwesomeIcon icon={faFileCirclePlus} size='sm' />

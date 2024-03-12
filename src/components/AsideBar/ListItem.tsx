@@ -92,14 +92,14 @@ export default function ListItem(props: ListItemProps) {
           </PopoverTrigger>
 
           <PopoverContent>
-            <menu className='flex flex-col bg-gray-800 text-white space-y-2 p-2 rounded'>
+            <menu className='flex flex-col bg-dark-300 text-white space-y-2 p-2 rounded'>
               {menus
                 .filter((v) => !v.disabled)
                 .map((v) => (
                   <button
                     key={v.value}
                     type='button'
-                    className='px-2 py-1 rounded cursor-pointer transition-all hover:bg-blue-300 text-left'
+                    className='px-2 py-1 rounded cursor-pointer transition-all hover:bg-white/20 text-left'
                     onClick={() => v.action()}
                   >
                     {v.label}

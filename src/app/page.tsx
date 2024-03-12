@@ -15,7 +15,7 @@ export default function Page() {
   const router = useRouter()
 
   useEffect(() => {
-    if (pathname === '/' && viewStatus.lastPath) {
+    if (pathname === '/') {
       router.replace(viewStatus?.lastPath || '/files')
     }
   }, [viewStatus, pathname, router])

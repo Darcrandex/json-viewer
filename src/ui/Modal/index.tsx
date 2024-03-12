@@ -35,7 +35,7 @@ export default function Modal(props: ModalProps) {
             exit={{ opacity: 0 }}
             className={cls('fixed top-12 left-1/2 -translate-x-1/2 p-4 rounded-md bg-white', props.bodyClassName)}
           >
-            <header className='flex items-center justify-between font-bold'>
+            <header className='flex items-center justify-between font-bold mb-4'>
               <span>{props.title}</span>
 
               <i
@@ -48,7 +48,7 @@ export default function Modal(props: ModalProps) {
 
             <main>{props.open && props.children}</main>
 
-            <footer className='flex justify-end space-x-2 mt-4'>{props.footer}</footer>
+            {!!props.footer && <footer className='flex justify-end space-x-2 mt-4'>{props.footer}</footer>}
           </motion.section>
         )}
       </AnimatePresence>

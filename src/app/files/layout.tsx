@@ -27,18 +27,16 @@ export default function FilesLayout(props: PropsWithChildren) {
   return (
     <>
       <section className='h-screen flex flex-col'>
-        <header className='p-2 bg-dark-500'>
-          <nav className='text-white'>
-            <b className='font-bold'>{`{{}}`}</b>
-            <span>JSON Viewer</span>
-            <i className='text-base'>{/* <FontAwesomeIcon icon={faGithub} /> */}</i>
+        <header className='p-2 bg-dark-300 border-b border-gray-500'>
+          <nav className='text-white text-center'>
+            <span>json viewer</span>
           </nav>
         </header>
 
         <section className='flex-1 flex overflow-auto'>
-          <AsideBar className='bg-gray-700' />
+          <AsideBar className='bg-dark-400' />
 
-          <main className='flex-1 bg-gray-600 overflow-auto'>{props.children}</main>
+          <main className='flex-1 bg-dark-300 overflow-auto'>{props.children}</main>
         </section>
       </section>
     </>

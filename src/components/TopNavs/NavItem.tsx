@@ -58,7 +58,7 @@ export default function NavItem(props: { data: NavSchema; onClick?: () => void; 
       )}
       onClick={() => props.onClick?.()}
     >
-      <span className={cls('truncate min-w-8 text-sm', error && 'line-through')}>{label}</span>
+      <span className={cls('truncate min-w-10 text-sm', error && 'line-through')}>{label}</span>
 
       <button
         type='button'

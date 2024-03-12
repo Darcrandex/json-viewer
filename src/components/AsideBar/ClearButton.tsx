@@ -15,20 +15,29 @@ export default function ClearButton(props: { onClear?: () => void; className?: s
 
   return (
     <>
-      <button type='button' className={cls('p-2 my-2', props.className)} onClick={() => setOpen(true)}>
+      <button
+        type='button'
+        className={cls('p-2 my-2 transition-all hover:opacity-75', props.className)}
+        onClick={() => setOpen(true)}
+      >
         <FontAwesomeIcon icon={faTrashCan} size='sm' />
       </button>
 
       <Modal title='tips' bodyClassName='w-96 max-w-full' open={open} onClose={() => setOpen(false)}>
         <p>are you sure to clear all files?</p>
-        <button
-          onClick={() => {
-            props.onClear?.()
-            setOpen(false)
-          }}
-        >
-          clear
-        </button>
+
+        <p className='mt-10 text-right'>
+          <button
+            type='button'
+            className='px-2 py-1 bg-dark-400 text-white rounded-md'
+            onClick={() => {
+              props.onClear?.()
+              setOpen(false)
+            }}
+          >
+            clear
+          </button>
+        </p>
       </Modal>
     </>
   )
