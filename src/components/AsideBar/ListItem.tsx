@@ -9,7 +9,7 @@ import { PopoverContent, PopoverRoot, PopoverTrigger } from '@/ui/Popover'
 import { cls } from '@/utils/cls'
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export type ListItemProps = {
   value: FileSchema
@@ -25,6 +25,19 @@ export type ListItemProps = {
 export default function ListItem(props: ListItemProps) {
   const [value, setValue] = useState(props.value.name)
   const [editing, setEditing] = useState(false)
+
+  const menus = useMemo(() => {
+    return [
+      { value: 'rename', label: 'Rename', disabled: false, action: () => setEditing(true) },
+      {
+        value: 'compare',
+        label: 'Compare',
+        disabled: !props.canCompare,
+        action: () => props.onCompare(props.value.id),
+      },
+      { value: 'remove', label: 'Delete', disabled: false, action: () => props.onRemove(props.value.id) },
+    ]
+  }, [props])
 
   const onConfirm = () => {
     setEditing(false)
@@ -79,28 +92,19 @@ export default function ListItem(props: ListItemProps) {
           </PopoverTrigger>
 
           <PopoverContent>
-            <menu className='flex flex-col w-48 p-2 space-y-2 bg-gray-800'>
-              <button
-                type='button'
-                className='cursor-pointer hover:bg-blue-300'
-                onClick={() => props.onRemove(props.value.id)}
-              >
-                remove
-              </button>
-
-              <button type='button' className='cursor-pointer hover:bg-blue-300' onClick={() => setEditing(true)}>
-                rename
-              </button>
-
-              {props.canCompare && (
-                <button
-                  type='button'
-                  className='cursor-pointer hover:bg-blue-300'
-                  onClick={() => props.onCompare(props.value.id)}
-                >
-                  compare to current
-                </button>
-              )}
+            <menu className='flex flex-col bg-gray-800 text-white space-y-2 p-2 rounded'>
+              {menus
+                .filter((v) => !v.disabled)
+                .map((v) => (
+                  <button
+                    key={v.value}
+                    type='button'
+                    className='px-2 py-1 rounded cursor-pointer transition-all hover:bg-blue-300 text-left'
+                    onClick={() => v.action()}
+                  >
+                    {v.label}
+                  </button>
+                ))}
             </menu>
           </PopoverContent>
         </PopoverRoot>

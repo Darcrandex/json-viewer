@@ -40,6 +40,7 @@ export default function ContentPage() {
   const { data, error } = useQuery({
     queryKey: ['content', fileId],
     enabled: !!fileId,
+    retry: false,
     queryFn: async () => {
       const res = await db.contents.getById(fileId)
 
@@ -50,13 +51,6 @@ export default function ContentPage() {
       }
     },
   })
-
-  useEffect(() => {
-    if (error) {
-      router.replace('/files')
-      queryClient.invalidateQueries({ queryKey: [] })
-    }
-  }, [error, router, queryClient])
 
   useOnReady(
     () => {
@@ -93,7 +87,6 @@ export default function ContentPage() {
   )
 
   // compare
-
   const { data: compareFile } = useQuery({
     queryKey: ['content', compareId],
     enabled: !!compareId,
@@ -107,14 +100,16 @@ export default function ContentPage() {
 
         <div className='flex-1 relative'>
           <article data-name='fixed-wrapper' className='absolute inset-0'>
-            {!!compareFile ? (
+            {error ? (
+              <p>file removed</p>
+            ) : !!compareFile ? (
               <DiffEditor
                 language='json'
                 theme={themeLoaded ? 'tomorrow-night-eighties' : 'vs-dark'}
                 loading={null}
                 options={{ fontSize: editorOptions.fontSize, readOnly: true }}
-                original={compareFile.content}
-                modified={value}
+                original={value}
+                modified={compareFile.content}
               />
             ) : (
               <MonacoEditor

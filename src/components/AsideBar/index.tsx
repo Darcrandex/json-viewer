@@ -39,10 +39,12 @@ export default function AsideBar(props: { className?: string }) {
       // 为了查询优化把它单独存储起来
       // 但是它的 id 应该与 file 的 id 一致
       await db.contents.update({ id, fileId: id, content: '' })
+      await db.navs.create({ fileId: id })
       return id
     },
     onSuccess: (createdId) => {
       queryClient.invalidateQueries({ queryKey: [] })
+      router.push(`/files/${createdId}`)
     },
   })
 

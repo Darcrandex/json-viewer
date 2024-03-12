@@ -1,4 +1,3 @@
-import {} from '@monaco-editor/react'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 

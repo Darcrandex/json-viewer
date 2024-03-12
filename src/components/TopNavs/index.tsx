@@ -5,13 +5,11 @@
  */
 
 import { NavSchema, db } from '@/lib/db'
-import { cls } from '@/utils/cls'
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import * as R from 'ramda'
 import { useEffect, useRef } from 'react'
+import NavItem, { generateEleId } from './NavItem'
 
 export default function TopNavs() {
   const { data: navList } = useQuery({
@@ -96,65 +94,4 @@ export default function TopNavs() {
       </nav>
     </>
   )
-}
-
-function NavItem(props: { data: NavSchema; onClick?: () => void; onRemove?: () => void }) {
-  const fileId = useParams().id as string
-  const compareId = useSearchParams().get('compareId') || undefined
-  const navFileId = props.data.fileId
-  const navCompareId = props.data.compareId
-
-  const { data: fileData } = useQuery({
-    queryKey: ['file', 'item', navFileId],
-    enabled: !!navFileId,
-    queryFn: () => db.files.getById(navFileId || ''),
-  })
-
-  const { data: compareFileData } = useQuery({
-    queryKey: ['file', 'item', navCompareId],
-    enabled: !!navCompareId,
-    queryFn: () => db.files.getById(navCompareId || ''),
-  })
-
-  const isActive = fileId === navFileId && compareId === navCompareId
-
-  return (
-    <div
-      id={generateEleId(navFileId, navCompareId)}
-      className={cls(
-        'group flex items-center',
-        'px-4 py-2 space-x-2 text-white cursor-pointer select-none',
-        isActive ? 'bg-dark-500' : ''
-      )}
-      onClick={() => props.onClick?.()}
-    >
-      {!!navCompareId ? (
-        <span className='truncate'>
-          <span>{fileData?.name}</span>
-          <span>--</span>
-          <span>{compareFileData?.name}</span>
-        </span>
-      ) : (
-        <span className='truncate'>{fileData?.name}</span>
-      )}
-
-      <button
-        type='button'
-        className={cls(
-          'inline-flex w-6 h-6 items-center justify-center rounded-full p-1 hover:bg-gray-500 transition-all',
-          isActive ? 'text-white hover:text-blue-300' : 'opacity-0 group-hover:opacity-100'
-        )}
-        onClick={(e) => {
-          e.stopPropagation()
-          props.onRemove?.()
-        }}
-      >
-        <FontAwesomeIcon icon={faXmark} size='sm' />
-      </button>
-    </div>
-  )
-}
-
-function generateEleId(fileId: string, compareId?: string) {
-  return compareId ? `nav-${fileId}-${compareId}` : `nav-${fileId}`
 }

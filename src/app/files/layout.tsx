@@ -4,24 +4,34 @@
  * @author darcrand
  */
 
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+'use client'
+import { useViewStatus } from '@/store/view-status'
 import dynamic from 'next/dynamic'
-import { PropsWithChildren } from 'react'
+import { usePathname } from 'next/navigation'
+import { PropsWithChildren, useEffect } from 'react'
 
 const AsideBar = dynamic(() => import('@/components/AsideBar'), {
   ssr: false,
 })
 
 export default function FilesLayout(props: PropsWithChildren) {
+  const { setViewStatus } = useViewStatus()
+  const pathname = usePathname()
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setViewStatus({ lastPath: pathname })
+    }, 1000)
+    return () => clearTimeout(t)
+  }, [pathname, setViewStatus])
+
   return (
     <>
       <section className='h-screen flex flex-col'>
         <header className='p-2 bg-dark-500'>
           <nav className='text-white'>
-            <b className='font-bold'>{`{:}`}</b>
+            <b className='font-bold'>{`{{}}`}</b>
             <span>JSON Viewer</span>
-            <FontAwesomeIcon icon={faGithub} className='text-base' />
+            <i className='text-base'>{/* <FontAwesomeIcon icon={faGithub} /> */}</i>
           </nav>
         </header>
 
