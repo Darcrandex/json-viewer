@@ -1,7 +1,7 @@
 import localforage from 'localforage'
 import { customAlphabet } from 'nanoid'
+import * as R from 'ramda'
 
-// key 保持顺序性
 const createId = () => customAlphabet('1234567890abcdef', 8)()
 
 export type DataSchema = {
@@ -41,7 +41,7 @@ export function createModel<T extends DataSchema>(options: { dbName: string; tab
         res.push(value)
       })
 
-      return res
+      return R.sortWith([R.ascend(R.prop('createdAt'))], res)
     },
 
     async count() {

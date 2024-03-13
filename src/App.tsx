@@ -5,7 +5,7 @@
  */
 
 import { Suspense } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import CodeView from './pages/CodeView'
 import Root from './pages/Root'
 

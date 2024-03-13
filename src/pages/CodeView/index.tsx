@@ -4,18 +4,20 @@
  * @author darcrand
  */
 
+import TopNavs from '@/components/TopNavs'
 import MonacoEditor from '@monaco-editor/react'
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useAddNav } from './useAddNav'
 
 export default function CodeView() {
-  const location = useLocation()
-  console.log('location', location)
+  useAddNav()
   const [value, setValue] = useState<string>()
 
   return (
     <>
       <section className='flex flex-col h-full'>
+        <TopNavs />
+
         <div className='flex-1 relative'>
           <article data-name='fixed-wrapper' className='absolute inset-0'>
             <MonacoEditor
