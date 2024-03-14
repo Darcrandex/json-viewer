@@ -5,6 +5,7 @@
  */
 
 import { NavSchema, db } from '@/lib/db'
+import { queryFileById } from '@/queries/queryFileById'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { head } from 'ramda'
 import { useMemo } from 'react'
@@ -26,22 +27,6 @@ export default function TopNavs() {
       </section>
     </>
   )
-}
-
-function queryFileById(id?: string) {
-  return {
-    enabled: !!id,
-    retry: false,
-    queryKey: ['file', id],
-    queryFn: async () => {
-      const res = await db.files.getById(id || '')
-      if (res) {
-        return res
-      } else {
-        throw new Error('file not found')
-      }
-    },
-  }
 }
 
 function NavItem(props: { data: NavSchema }) {
