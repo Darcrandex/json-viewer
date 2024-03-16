@@ -73,7 +73,7 @@ export default function AsideMenus(props: AsideMenusProps) {
   return (
     <>
       <aside className={cls('border-r', props.className)}>
-        <section className='border-b space-x-2'>
+        <section className='border-b space-x-2 p-2'>
           <button onClick={() => createFile()}>add</button>
           <button>clear</button>
         </section>
