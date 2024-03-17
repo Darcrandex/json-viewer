@@ -5,9 +5,12 @@
  */
 
 import { FileSchema, db } from '@/lib/db'
+import IconButton from '@/ui/IconButton'
 import { cls } from '@/utils/cls'
+import { faFileCirclePlus } from '@fortawesome/free-solid-svg-icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
+import ClearButton from './ClearButton'
 import ListItem from './ListItem'
 
 export type AsideMenusProps = { className?: string }
@@ -70,15 +73,23 @@ export default function AsideMenus(props: AsideMenusProps) {
     }
   }
 
+  const onClear = async () => {
+    await db.files.clear()
+    await db.contents.clear()
+    await db.navs.clear()
+    queryClient.invalidateQueries({ queryKey: [] })
+    navigate('/', { replace: true })
+  }
+
   return (
     <>
-      <aside className={cls('border-r', props.className)}>
-        <section className='border-b space-x-2 p-2'>
-          <button onClick={() => createFile()}>add</button>
-          <button>clear</button>
+      <aside className={cls(props.className)}>
+        <section className='space-x-4 p-4 text-right'>
+          <IconButton icon={faFileCirclePlus} onClick={() => createFile()} />
+          <ClearButton onClear={onClear} />
         </section>
 
-        <nav className='space-y-2'>
+        <nav>
           {fileList?.map((v) => (
             <ListItem
               key={v.id}

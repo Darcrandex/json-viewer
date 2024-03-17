@@ -69,8 +69,8 @@ export default function ListItem(props: ListItemProps) {
     <>
       <div
         className={cls(
-          'group relative flex justify-between items-center p-2 cursor-pointer transition-all',
-          isActive ? 'bg-orange-500/20' : 'hover:text-orange-500/80',
+          'group relative flex justify-between items-center p-2 cursor-pointer transition-all text-white',
+          isActive ? 'bg-white/20' : 'hover:bg-white/10',
           props.className
         )}
         onClick={() => navigate(`/${props.value.id}`)}
@@ -110,7 +110,7 @@ export default function ListItem(props: ListItemProps) {
             <FontAwesomeIcon icon={faEllipsis} size='sm' />
           </PopoverTrigger>
 
-          <PopoverContent className='shadow bg-white'>
+          <PopoverContent className='shadow bg-white rounded-md'>
             <menu className='flex flex-col bg-dark-300 space-y-2 p-2 rounded'>
               {menus
                 .filter((v) => !v.disabled)
@@ -118,7 +118,7 @@ export default function ListItem(props: ListItemProps) {
                   <button
                     key={v.value}
                     type='button'
-                    className='px-2 py-1 text-left rounded cursor-pointer transition-all hover:text-orange-300'
+                    className='px-2 py-1 text-left rounded cursor-pointer transition-all hover:bg-gray-800/10'
                     onClick={() => v.action()}
                   >
                     {v.label}
