@@ -8,8 +8,8 @@ export default function Hello() {
   return (
     <>
       <section className='flex flex-col items-center justify-center h-[60vh]'>
-        <span className='text-6xl text-primary' style={{ fontFamily: 'Monoton-Regular' }}>
-          &#123;&#125;
+        <span className='text-primary' style={{ fontFamily: 'Monoton-Regular', fontSize: '100px' }}>
+          &#123;&nbsp;&#125;
         </span>
       </section>
     </>

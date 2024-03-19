@@ -36,9 +36,8 @@ export default function Root() {
       <section className='flex flex-col h-screen overflow-auto'>
         <header className='p-4 space-x-4 bg-zinc-900'>
           <span className='inline-block text-primary' style={{ fontFamily: 'Monoton-Regular' }}>
-            &#123;&#125;
+            &#123;&nbsp;&#125;
           </span>
-          <span className='text-white'>json-viewer</span>
         </header>
 
         <section className='flex-1 flex'>

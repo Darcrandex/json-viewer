@@ -13,7 +13,10 @@ export default function IconButton(props: IconButtonProps) {
     <>
       <button
         title={props.title}
-        className={cls('text-white transition-all hover:opacity-75', props.className)}
+        className={cls(
+          'inline-flex items-center justify-center w-6 h-6 rounded-md text-white transition-all hover:bg-white/10',
+          props.className
+        )}
         onClick={props.onClick}
       >
         <FontAwesomeIcon icon={props.icon} size='sm' />
