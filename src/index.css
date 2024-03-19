@@ -9,3 +9,11 @@
   font-display: swap;
   src: url('/fonts/Monoton-Regular.min.woff2') format('truetype');
 }
+
+@layer {
+  html {
+    --header-color: #21252b;
+    --sidebar-color: #333843;
+    --content-wrap-color: #282c34;
+  }
+}

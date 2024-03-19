@@ -77,6 +77,7 @@ export default function AsideMenus(props: AsideMenusProps) {
     await db.files.clear()
     await db.contents.clear()
     await db.navs.clear()
+    window.localStorage.clear()
     queryClient.invalidateQueries({ queryKey: [] })
     navigate('/', { replace: true })
   }

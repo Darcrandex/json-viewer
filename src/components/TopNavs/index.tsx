@@ -6,10 +6,9 @@
 
 import { NavSchema, db } from '@/lib/db'
 import { queryFileById } from '@/queries/queryFileById'
-import IconButton from '@/ui/IconButton'
+import CloseButton from '@/ui/CloseButton'
 import { cls } from '@/utils/cls'
 import { getUrlData } from '@/utils/getUrlData'
-import { faClose } from '@fortawesome/free-solid-svg-icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { head } from 'ramda'
 import { useEffect, useMemo, useRef } from 'react'
@@ -58,7 +57,7 @@ export default function TopNavs() {
 
   return (
     <>
-      <section ref={refNav} className='flex flex-nowrap overflow-auto'>
+      <section ref={refNav} className='flex flex-nowrap overflow-auto bg-[var(--header-color)]'>
         {navList?.map((v) => (
           <NavItem key={v.id} data={v} />
         ))}
@@ -76,7 +75,7 @@ function NavItem(props: { data: NavSchema }) {
   const label = useMemo(() => {
     if (fileRes.data) {
       if (compareFileRes.data) {
-        return `${fileRes.data.name} vs ${compareFileRes.data.name}`
+        return `${fileRes.data.name} - ${compareFileRes.data.name}`
       } else {
         return fileRes.data.name
       }
@@ -85,45 +84,58 @@ function NavItem(props: { data: NavSchema }) {
 
   const hasError = fileRes.error || compareFileRes.error
 
+  const location = useLocation()
+  const { fid: _fid, cid: _cid } = getUrlData(`${location.pathname}${location.search}`)
+  const isActive = _fid === fid && _cid === cid
+
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { mutateAsync: removeNav } = useMutation({
     mutationFn: async () => {
-      await db.navs.remove(props.data.id)
+      const removedId = props.data.id
       const navs = await db.navs.getAll()
-      const firstNav = head(navs)
-      return firstNav ? firstNav.url : '/'
+      const removedIndex = navs.findIndex((v) => v.id === removedId)
+      await db.navs.remove(removedId)
+
+      const nextNavs = await db.navs.getAll()
+      const nextNav = nextNavs[removedIndex] || nextNavs[removedIndex - 1]
+      const firstNav = head(nextNavs)
+
+      return isActive ? nextNav?.url || firstNav?.url || '/' : undefined
     },
     onSuccess(url) {
       queryClient.invalidateQueries({ queryKey: ['navs'] })
-      navigate(url)
+      !!url && navigate(url)
     },
   })
 
-  const location = useLocation()
-  const { fid: _fid, cid: _cid } = getUrlData(`${location.pathname}${location.search}`)
-  const isActive = _fid === props.data.fid && _cid === props.data.cid
-
   return (
-    <span
+    <Link
       id={generateEleId(props.data.fid, props.data.cid)}
+      to={props.data.url}
       className={cls(
-        'flex items-center space-x-4 p-2 border-b border-transparent',
-        isActive && 'bg-zinc-900 border-primary'
+        'group flex items-center space-x-4 pl-4 pr-2 py-2 border-b border-transparent select-none',
+        isActive && 'border-gray-500 bg-[var(--content-wrap-color)]'
       )}
     >
-      <Link
-        to={props.data.url}
+      <span
         className={cls(
           'text-white transition-all truncate hover:opacity-75',
           hasError && 'line-through'
         )}
       >
         {hasError ? 'file removed' : label}
-      </Link>
+      </span>
 
-      <IconButton icon={faClose} onClick={() => removeNav()} />
-    </span>
+      <CloseButton
+        className={cls(!isActive && 'invisible group-hover:visible')}
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          removeNav()
+        }}
+      />
+    </Link>
   )
 }
 

@@ -69,7 +69,7 @@ export default function ListItem(props: ListItemProps) {
     <>
       <div
         className={cls(
-          'group relative flex justify-between items-center p-2 cursor-pointer transition-all text-white',
+          'group relative flex justify-between items-center p-2 cursor-pointer transition-all text-gray-100',
           isActive ? 'bg-white/20' : 'hover:bg-white/10',
           props.className
         )}
@@ -118,7 +118,7 @@ export default function ListItem(props: ListItemProps) {
                   <button
                     key={v.value}
                     type='button'
-                    className='px-2 py-1 text-left rounded cursor-pointer transition-all hover:bg-gray-800/10'
+                    className='px-2 py-1 text-left text-gray-700 rounded cursor-pointer transition-all hover:bg-gray-800/10'
                     onClick={() => v.action()}
                   >
                     {v.label}

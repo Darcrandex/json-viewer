@@ -34,16 +34,14 @@ export default function Root() {
   return (
     <>
       <section className='flex flex-col h-screen overflow-auto'>
-        <header className='p-4 space-x-4 bg-zinc-900'>
-          <span className='inline-block text-primary' style={{ fontFamily: 'Monoton-Regular' }}>
-            &#123;&nbsp;&#125;
-          </span>
+        <header className='p-2 text-center bg-[var(--header-color)]'>
+          <span className='text-gray-500'>JSON Viewer React</span>
         </header>
 
         <section className='flex-1 flex'>
-          <AsideMenus className='w-64 shrink-0 bg-zinc-800' />
+          <AsideMenus className='w-64 shrink-0 bg-[var(--sidebar-color)]' />
 
-          <main className='flex-1 overflow-auto bg-[#2d2d2d]'>
+          <main className='flex-1 overflow-auto bg-[var(--content-wrap-color)]'>
             <Outlet />
           </main>
         </section>

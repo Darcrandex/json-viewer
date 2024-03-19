@@ -84,7 +84,7 @@ export default function CodeView() {
                 language='json'
                 loading={null}
                 theme={themeLoaded ? 'tomorrow-night-eighties' : 'vs-dark'}
-                options={{ readOnly: true }}
+                options={{ readOnly: true, fontSize: 18 }}
                 original={value}
                 modified={compareFileContentRes.data?.content}
               />
@@ -93,6 +93,7 @@ export default function CodeView() {
                 language='json'
                 loading={null}
                 theme={themeLoaded ? 'tomorrow-night-eighties' : 'vs-dark'}
+                options={{ fontSize: 18 }}
                 value={value}
                 onChange={(val) => {
                   setValue(val)

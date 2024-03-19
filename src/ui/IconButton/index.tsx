@@ -14,7 +14,7 @@ export default function IconButton(props: IconButtonProps) {
       <button
         title={props.title}
         className={cls(
-          'inline-flex items-center justify-center w-6 h-6 rounded-md text-white transition-all hover:bg-white/10',
+          'inline-flex items-center justify-center w-6 h-6 rounded-md text-gray-100 transition-all hover:opacity-80',
           props.className
         )}
         onClick={props.onClick}
