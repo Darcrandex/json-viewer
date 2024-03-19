@@ -4,7 +4,6 @@
  * @author darcrand
  */
 
-'use client'
 import { cls } from '@/utils/cls'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -33,7 +32,10 @@ export default function Modal(props: ModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={cls('fixed top-12 left-1/2 -translate-x-1/2 p-4 rounded-md bg-white', props.bodyClassName)}
+            className={cls(
+              'fixed top-12 left-1/2 -translate-x-1/2 p-4 rounded-md bg-white',
+              props.bodyClassName
+            )}
           >
             <header className='flex items-center justify-between font-bold mb-4'>
               <span>{props.title}</span>
@@ -48,7 +50,9 @@ export default function Modal(props: ModalProps) {
 
             <main>{props.open && props.children}</main>
 
-            {!!props.footer && <footer className='flex justify-end space-x-2 mt-4'>{props.footer}</footer>}
+            {!!props.footer && (
+              <footer className='flex justify-end space-x-2 mt-4'>{props.footer}</footer>
+            )}
           </motion.section>
         )}
       </AnimatePresence>

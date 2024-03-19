@@ -1,19 +1,19 @@
-'use client'
-
 import { createModel, type DataSchema } from './utils'
 
 export type FileSchema = DataSchema & {
   name: string
+  contentId?: string
 }
 
 export type NavSchema = DataSchema & {
-  fileId: string
-  compareId?: string // 比较文件的 id
+  url: string
+  fid: string
+  cid?: string
 }
 
 export type ContentSchema = DataSchema & {
-  fileId: string
-  content?: string
+  content: string
+  fileId?: string
 }
 
 export const db = {

@@ -1,4 +1,3 @@
-'use client'
 import { useEffect, useState } from 'react'
 
 export function useOnReady<T>(callback: T, isReady: boolean | (() => boolean)) {

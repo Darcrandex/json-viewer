@@ -20,7 +20,11 @@ export default function Trigger(
       <button
         ref={ref}
         type='button'
-        className={typeof props.className === 'function' ? props.className({ isOpen: open }) : props.className}
+        className={
+          typeof props.className === 'function'
+            ? props.className({ isOpen: open })
+            : props.className
+        }
         onClick={(e) => {
           e.stopPropagation()
           setOpen(true)
