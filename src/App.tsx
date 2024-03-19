@@ -5,12 +5,12 @@
  */
 
 import { Suspense } from 'react'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createHashRouter } from 'react-router-dom'
 import CodeView from './pages/CodeView'
 import Hello from './pages/Hello'
 import Root from './pages/Root'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <Root />,
