@@ -10,13 +10,17 @@ import { queryContentById } from '@/queries/queryContentById'
 import { queryFileById } from '@/queries/queryFileById'
 import { cls } from '@/utils/cls'
 import { getUrlData } from '@/utils/getUrlData'
-import MonacoEditor, { DiffEditor, useMonaco } from '@monaco-editor/react'
+import MonacoEditor, { DiffEditor, loader, useMonaco } from '@monaco-editor/react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAddNav } from './useAddNav'
 
 import themeData from '@/assets/monaco-themes/tomorrow.json'
+
+// 默认 loader 使用 cdn
+// 改为本地资源
+loader.config({ paths: { vs: '/monaco-editor/vs' } })
 
 export default function CodeView() {
   useAddNav()
