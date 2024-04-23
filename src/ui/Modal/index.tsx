@@ -20,7 +20,7 @@ export default function Modal(props: ModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className='fixed top-0 right-0 bottom-0 left-0 bg-black/25'
+            className='fixed inset-0 z-50 bg-black/25'
             onClick={props.onClose}
           ></motion.div>
         )}
@@ -33,7 +33,7 @@ export default function Modal(props: ModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={cls(
-              'fixed top-12 left-1/2 -translate-x-1/2 p-4 rounded-md bg-white',
+              'fixed top-12 left-1/2 z-50 -translate-x-1/2 p-4 rounded-md bg-white',
               props.bodyClassName
             )}
           >
